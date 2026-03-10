@@ -13,7 +13,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     public void register(RegisterDto dto) {
-        //TODO: Check user existence
+        if (userRepository.existsByUsername(dto.getUsername())) {
+            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
+        }
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("Почта уже используется");
+        }
+        if (dto.getPassword().equals(dto.getConfirmPassword())) {
+            throw new IllegalArgumentException("Пароль не сопадает");
+        }
+
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
