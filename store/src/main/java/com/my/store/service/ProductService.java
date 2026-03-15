@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,5 +22,39 @@ public class ProductService {
 
     public Product create(Product product) {
         return productRepository.save(product);
+    }
+
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
+    }
+
+    public Product update(Long id, Product updated) {
+        Product existing = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Товар не найден"));
+
+        existing.setName(updated.getName());
+        existing.setDescription(updated.getDescription());
+        existing.setPrice(updated.getPrice());
+        existing.setStockQuantity(updated.getStockQuantity());
+        existing.setCategory(updated.getCategory());
+        existing.setBrand(updated.getBrand());
+        existing.setModel(updated.getModel());
+        existing.setImageUrl(updated.getImageUrl());
+        existing.setActive(updated.isActive());
+
+        return productRepository.save(existing);
+    }
+
+    public void delete(Long id) {
+        productRepository.deleteById(id);
+    }
+    public void toggleActive(Long id) {
+        Product existing = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Товар не найден"));
+
+        existing.setActive(!existing.isActive());
+        productRepository.save(existing);
+    }
+
+    public List<Product> findNewest() {
+        return productRepository.findTop8ByActiveTrueOrderByCreatedAtDesc();
     }
 }

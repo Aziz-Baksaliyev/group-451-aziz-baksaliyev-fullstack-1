@@ -1,9 +1,12 @@
 package com.my.store.repository;
 
 import com.my.store.model.Product;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+import java.util.List;
 
-    void create(Product product);
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    List<Product> findTop8ByActiveTrueOrderByCreatedAtDesc();
+
 }

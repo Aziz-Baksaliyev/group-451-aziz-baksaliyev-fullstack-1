@@ -60,6 +60,7 @@ public class Product {
         this.updatedAt = LocalDateTime.now();
     }
 
+
     public enum Category {
         LAPTOPS("Ноутбуки"),
         SMARTPHONES("Смартфоны"),

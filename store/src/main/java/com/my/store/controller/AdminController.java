@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping
 @RequiredArgsConstructor
-public class AdminContoller {
+public class AdminController {
 
     private final ProductService productService;
     private final ProductRepository productRepository;
@@ -56,6 +56,39 @@ public class AdminContoller {
         productRepository.create(product);
         redirectAttributes.addFlashAttribute("success", "Товар успешно создан");
 
+        return "redirect:/admin/products";
+    }
+    @GetMapping("/products/{id}/edit")
+    public String editProductForm(@PathVariable long id, Model model) {
+        Product product = productService.findById(id).orElseThrow(() -> new RuntimeException("Товар не найден"));
+        model.addAttribute("product", product);
+        model.addAttribute("categories", Product.Category.values());
+        return "admin/product-form";
+    }
+
+    @PostMapping("/products/{id}/edit")
+    public String updateProduct(@PathVariable Long id, @ModelAttribute("product") Product product, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            model.addAttribute("categories", Product.Category.values());
+            return "admin/product-form";
+        }
+
+        productService.update(id, product);
+        redirectAttributes.addFlashAttribute("success", "Товар обновлен");
+
+        return "redirect:/admin/products";
+    }
+    @PostMapping("/products/{id}/delete")
+    public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        productService.delete(id);
+        redirectAttributes.addFlashAttribute("success", "Товар удален");
+        return "redirect:/admin/products";
+    }
+
+    @PostMapping("/products/{id}/toggle")
+    public String toggleProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        productService.toggleActive(id);
+        redirectAttributes.addFlashAttribute("success", "Статус товара изменен");
         return "redirect:/admin/products";
     }
 }
