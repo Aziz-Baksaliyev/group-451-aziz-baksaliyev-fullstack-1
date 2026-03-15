@@ -1,6 +1,5 @@
 package com.my.store.controller;
 
-import com.my.store.model.Product;
 import com.my.store.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

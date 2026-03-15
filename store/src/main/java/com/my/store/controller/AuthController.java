@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController {
 
     private final UserService userService;
+
     @GetMapping("/login")
     public String loginPage() {
         return "auth/login";
@@ -28,6 +29,7 @@ public class AuthController {
         model.addAttribute("registerDto", new RegisterDto());
         return "auth/register";
     }
+
     @PostMapping("/register")
     public String register(@ModelAttribute("registerDto") RegisterDto dto, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
 
@@ -37,17 +39,11 @@ public class AuthController {
 
         try {
             userService.register(dto);
-            redirectAttributes.addFlashAttribute("success", "Регистрация прошла успешно! Войдите в систему");
+            redirectAttributes.addFlashAttribute("success", "Регистрация прошла успешно! Войдите в систему.");
             return "redirect:/auth/login";
-        } catch (IllegalArgumentException e) {
+        } catch(IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "auth/register";
         }
     }
 }
-
-
-
-
-//localhost:5090/auth/login
-//localhost:5090/auth/register

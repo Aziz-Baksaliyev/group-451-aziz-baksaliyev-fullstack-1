@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -48,6 +47,7 @@ public class ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
+
     public void toggleActive(Long id) {
         Product existing = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Товар не найден"));
 
@@ -59,7 +59,7 @@ public class ProductService {
         return productRepository.findTop8ByActiveTrueOrderByCreatedAtDesc();
     }
 
-    public Page<Product> search (String query, Pageable pageable) {
+    public Page<Product> search(String query, Pageable pageable) {
         return productRepository.searchProducts(query, pageable);
     }
 

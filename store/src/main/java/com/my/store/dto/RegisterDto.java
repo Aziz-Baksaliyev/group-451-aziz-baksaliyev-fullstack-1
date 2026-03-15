@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class RegisterDto {
+
     @NotBlank(message = "Имя пользователя обязательно")
     @Size(min = 3, max = 50, message = "Имя пользователя от 3 до 50 символов")
     private String username;
@@ -16,15 +17,13 @@ public class RegisterDto {
     private String email;
 
     @NotBlank(message = "Пароль обязателен")
-    @Email(message = "Пароль минимум 6 символов")
+    @Size(min = 6, message = "Пароль минимум 6 символов")
     private String password;
 
     @NotBlank(message = "Подтверждение пароля обязательно")
     private String confirmPassword;
 
     private String firstName;
-
     private String lastName;
-
     private String phone;
 }

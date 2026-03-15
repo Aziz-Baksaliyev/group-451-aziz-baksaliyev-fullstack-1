@@ -20,7 +20,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotBlank
     @Column(nullable = false)
@@ -60,19 +60,17 @@ public class Product {
         this.updatedAt = LocalDateTime.now();
     }
 
-
     public enum Category {
         LAPTOPS("Ноутбуки"),
         SMARTPHONES("Смартфоны"),
-        TABLETS("Плангеты"),
+        TABLETS("Планшеты"),
         MONITORS("Мониторы"),
         KEYBOARDS("Клавиатуры"),
         MICE("Мыши"),
         HEADPHONES("Наушники"),
         CAMERAS("Камеры"),
         PRINTERS("Принтеры"),
-        OTHER("Прочее"),
-        ;
+        OTHER("Прочее");
 
         private final String displayName;
 

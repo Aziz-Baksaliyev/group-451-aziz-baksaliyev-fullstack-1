@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -22,7 +23,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("")
+    @GetMapping
     public String list(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
@@ -47,7 +48,7 @@ public class ProductController {
             products = productService.findByCategory(Product.Category.valueOf(category), pageable);
             model.addAttribute("selectedCategory", category);
         } else if (minPrice != null || maxPrice != null || brand != null) {
-            Product.Category cat = category != null && category.isBlank() ? Product.Category.valueOf(category) : null;
+            Product.Category cat = category != null && !category.isBlank() ? Product.Category.valueOf(category) : null;
 
             products = productService.filter(cat, minPrice, maxPrice, brand, pageable);
         } else {
@@ -57,12 +58,23 @@ public class ProductController {
 
         model.addAttribute("products", products);
         model.addAttribute("categories", Product.Category.values());
-        model.addAttribute("brands",productService.findAllBrands());
+        model.addAttribute("brands", productService.findAllBrands());
         model.addAttribute("currentPage", page);
-        model.addAttribute("sortfield", sort);
+        model.addAttribute("sortField", sort);
         model.addAttribute("sortDir", dir);
 
 
         return "product/list";
     }
+
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        Product product = productService.findById(id).orElseThrow(() -> new RuntimeException("Товар не найден"));
+
+        model.addAttribute("product", product);
+        model.addAttribute("categories", Product.Category.values());
+        return "product/detail";
+    }
+
 }

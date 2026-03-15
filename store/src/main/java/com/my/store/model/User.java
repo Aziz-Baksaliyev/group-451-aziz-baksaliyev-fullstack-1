@@ -17,7 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotBlank
     @Size(min = 3, max = 50)
@@ -49,7 +49,7 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    //TODO: Add orders and cart
+    // TODO: Add orders list and cart
 
-    public enum Role {USER, ADMIN}
+    public enum Role { USER, ADMIN };
 }
